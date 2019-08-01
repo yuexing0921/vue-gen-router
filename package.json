@@ -1,0 +1,59 @@
+{
+  "name": "vue-gen-router",
+  "version": "0.0.1",
+  "description": "Automated generation of vue-router",
+  "main": "./dist/index.js",
+  "author": "yuexing0921@gmail.com",
+  "keywords": [
+    "vue",
+    "router",
+    "routing",
+    "vue-router"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yuexing0921/vue-gen-router"
+  },
+  "license": "MIT",
+  "bin": {
+    "vue-gen-router": "./bin/vue-gen-router"
+  },
+  "files": [
+    "dist/",
+    "bin/",
+    "example/"
+  ],
+  "scripts": {
+    "precommit": "lint-staged",
+    "lint": "tslint --fix",
+    "build": "rm -fr ./dist && tsc",
+    "format": "prettier --write",
+    "dev": "tsc --watch"
+  },
+  "lint-staged": {
+    "*.{ts}": [
+      "format",
+      "lint:fix",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "fs-extra": "^8.1.0",
+    "js-yaml": "^3.13.1",
+    "prettier": "^1.18.2",
+    "yargs": "^13.3.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^8.0.0",
+    "@types/js-yaml": "^3.12.1",
+    "@types/node": "^9.4.0",
+    "@types/prettier": "^1.18.0",
+    "husky": "^3.0.1",
+    "lint-staged": "^9.2.1",
+    "tslint": "^5.18.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.5.3",
+    "vue-router": "^3.0.7"
+  }
+}

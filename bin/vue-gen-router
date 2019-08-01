@@ -1,0 +1,49 @@
+#!/usr/bin/env node
+
+const path = require("path");
+const fs = require("fs");
+const utils = require("../dist/util");
+const yargs = require("yargs").options({
+	output: {
+		alias: "o",
+		describe: "Generate source file",
+		type: "string",
+		default: "src/routers"
+	},
+	file: {
+		alias: "f",
+		describe: "File name",
+		type: "string",
+		default: "config.tsx"
+	},
+	input: {
+		alias: "i",
+		describe: "The yaml file that needs to be transformed",
+        type: "string",
+        demandOption: true
+	}
+});
+
+const argv = yargs.argv;
+
+const inputPath = path.resolve(argv.input);
+
+/**
+ * 判断要转换的文件是否存在
+ */
+if (!fs.existsSync(inputPath)) {
+    utils.printError(`${inputPath} not find.`);
+    console.log();
+    yargs.showHelp();
+    return;
+}
+
+const { run } = require("../dist");
+
+const buildOption = {
+	output: argv.output,
+	input: argv.input,
+	file: argv.file
+};
+
+run(buildOption);
