@@ -1,0 +1,9 @@
+# .prettierrc
+parser: "typescript"
+printWidth: 80
+singleQuote: true
+semi: true
+tabWidth: 2
+insertPragma: true
+bracketSpacing: true
+useTabs: false

@@ -32,9 +32,9 @@
   },
   "lint-staged": {
     "*.{ts}": [
-      "format",
-      "lint:fix",
-      "git add"
+      "yarn run  format",
+      "yarn run  lint",
+      "git add ."
     ]
   },
   "dependencies": {
