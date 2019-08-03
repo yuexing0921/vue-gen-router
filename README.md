@@ -6,9 +6,16 @@
 ```
 bin/vue-gen-router -i example/router.yaml 
 ```
+默认会在src/routers 目录下生成一个config.ts 的typescript的文件
+
+#### cli 配置选项
+- [x] [必选]-i yaml的加载文件
+- [ ] [可选]-f 生成的router的文件名，默认是config.ts, 如果修改成xxx.js，则生成的就是js文件
+- [ ] [可选]-o 生成的router的文件输出到那个文件夹，默认是src/routers
 
 #### yaml 配置选项
 
 参考example
 
 > 具体参照官网 https://router.vuejs.org/zh/api/#routes
+

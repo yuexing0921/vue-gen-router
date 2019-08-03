@@ -1,77 +1,141 @@
+/** @format */
 
-import {RouteConfig} from "vue-router";
-import { loadYaml ,writeFile} from "./util";
-
-
-
-
-
-// console.log(loadYaml(yamlPath))
+import { RouteConfig } from 'vue-router';
+import { loadYaml, writeFile } from './util';
 
 export interface CliOption {
-  output:string
-  file:string
-  input:string
-
+  output: string;
+  file: string;
+  input: string;
 }
 
+export interface YamlData {
+  routes: RouteConfig[];
+  components?: { [key: string]: string };
+}
 
+const renderKeep = (keepStr: string) => {
+  const keeps = keepStr.split(':');
 
-const renderRoute = (route:RouteConfig,isTs:boolean)=>{
-
-  const rs:string[] = []
- 
-  for(const r of Object.keys(route)){
-    const key:keyof RouteConfig = r as any;
-    switch(key){
-      case "meta":
-          rs.push(`${r}:${JSON.stringify(route[r])}`)
-          break;
-      case "component":
-          rs.push(`${r}:import('${route[r]}')`)
-          break;
-      case "children":
-          const children:string[] = []
-          route[r].forEach(element => {
-            children.push(`{${renderRoute(element,isTs)}}`)
-          });
-          rs.push(`${r}:[${children}]`)
-          break;
-      default:
-          rs.push(`${r}:'${route[r]}'`)
-          break;
-    }
+  return `{
+    render: () => (
+      <keep-alive include="${keeps[1]}">
+        <router-view />
+      </keep-alive>
+    )
   }
-  return rs.join()
-}
+`;
+};
+const renderRoute = (
+  route: RouteConfig,
+  components: YamlData['components'],
+  isTs: boolean
+) => {
+  const rs: string[] = [];
+  if (!components) {
+    components = {};
+  }
+  for (const r of Object.keys(route)) {
+    const key: keyof RouteConfig = r as any;
+    const item = route[key];
+    let value: string = `'${item}'`;
+    switch (key) {
+      case 'meta':
+        value = JSON.stringify(item);
+        break;
+      case 'component':
+        if (item.match(/^keep/)) {
+          value = renderKeep(item);
+        } else if (components[item]) {
+          value = item;
+        } else {
+          if (isTs) {
+            // Why do I need to add @ts-ignore ?
+            // https://github.com/vuejs/vue-cli/issues/1198
+            // https://github.com/Microsoft/TypeScript/issues/19573
+            value = `
+            // @ts-ignore
+            ${key}: () => import('${item}')
+            `;
+            rs.push(value);
+            continue;
+          } else {
+            value = `() => import('${item}')`;
+          }
+        }
+        break;
+      case 'children':
+        const children: string[] = [];
+        route[r].forEach(element => {
+          children.push(`{${renderRoute(element, components, isTs)}}`);
+        });
+        value = `[${children}]`;
+        break;
+    }
 
-const genTs = (opiton: CliOption,str:string)=>{
+    rs.push(`${key}:${value}`);
+  }
+  return rs.join();
+};
+
+const renderComponents = (c: YamlData['components'], isTs: boolean) => {
+  if (!c) {
+    return '';
+  }
+  const imports: string[] = [];
+  for (const key of Object.keys(c)) {
+    if (isTs) {
+      imports.push(`// @ts-ignore`);
+    }
+    imports.push(`import ${key} from '${c[key]}'`);
+  }
+  return imports.join('\n');
+};
+
+const genTs = (opiton: CliOption, importStr: string, routeStr: string) => {
   const code = `
   import { RouteConfig } from 'vue-router'
+  
+  ${importStr}
 
   export const routerConfig: RouteConfig[] =[
-    ${str}
+    ${routeStr}
   ]
-  `
-  writeFile(opiton.output,opiton.file,code );
+  `;
+  writeFile(opiton.output, opiton.file, code);
+};
 
-}
+const genJs = (opiton: CliOption, importStr: string, routeStr: string) => {
+  const code = `
+  
+  ${importStr}
+
+  export const routerConfig =[
+    ${routeStr}
+  ]
+  `;
+  writeFile(opiton.output, opiton.file, code);
+};
 
 /**
- * @param opiton 
+ * @param opiton
  */
 export const run = (opiton: CliOption) => {
-  console.log(opiton)
-  
-  const yamlData:RouteConfig[] = loadYaml(opiton.input);
+  const yamlData: YamlData = loadYaml(opiton.input);
 
-  const routers:string[]= [];
+  const routes: string[] = [];
 
-  const isTs:boolean = !!opiton.file.match(/\.tsx?$/) || false
-  
-  
-  yamlData.forEach(k => {
-    routers.push('{' + renderRoute(k,isTs) + '}')
-  })
-  genTs(opiton,routers.join());
+  const isTs: boolean = !!opiton.file.match(/\.tsx?$/) || false;
+
+  yamlData.routes.forEach(k => {
+    routes.push('{' + renderRoute(k, yamlData.components, isTs) + '}');
+  });
+  const importStr = renderComponents(yamlData.components, isTs);
+
+  // console.log(isTs, routes, importStr);
+  if (isTs) {
+    genTs(opiton, importStr, routes.join());
+  } else {
+    genJs(opiton, importStr, routes.join());
+  }
 };

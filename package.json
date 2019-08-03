@@ -32,10 +32,15 @@
   },
   "lint-staged": {
     "*.{ts}": [
-      "yarn run  format",
+      "yarn run format",
       "yarn run  lint",
       "git add ."
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn run precommit"
+    }
   },
   "dependencies": {
     "chalk": "^2.4.2",

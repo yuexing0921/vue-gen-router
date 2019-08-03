@@ -1,25 +1,27 @@
-import chalk from "chalk";
+/** @format */
+
+import chalk from 'chalk';
 
 import {
   ensureDir,
   existsSync,
   readFileSync,
   writeFile as feWriteFile
-} from "fs-extra";
-import { safeLoad } from "js-yaml";
+} from 'fs-extra';
+import { safeLoad } from 'js-yaml';
 
-import  * as fspath from "path";
+import * as fspath from 'path';
 
-import { format as prettify } from "prettier";
+import { format as prettify } from 'prettier';
 
 export function format(code: string): string {
   return prettify(code, {
-    parser: "typescript",
+    parser: 'typescript',
     printWidth: 80,
     singleQuote: true,
     semi: true,
     tabWidth: 2,
-    insertPragma:true,
+    insertPragma: true,
     bracketSpacing: true,
     useTabs: false
   });
@@ -32,17 +34,17 @@ export const printError = (msg: string) => {
 
 export const loadYaml = (path: string) => {
   if (!existsSync(path)) {
-    throw new Error("no such file or directory");
+    throw new Error('no such file or directory');
   }
 
-  const yamlFile = readFileSync(path, "utf8");
+  const yamlFile = readFileSync(path, 'utf8');
   return safeLoad(yamlFile);
 };
 
-export const writeFile = (dirPath: string,fileName:string, data: string) => {
-  const path = fspath.join(dirPath,fileName);
+export const writeFile = (dirPath: string, fileName: string, data: string) => {
+  const path = fspath.join(dirPath, fileName);
 
   ensureDir(dirPath, { mode: 0o2775 }).then(() => {
-    feWriteFile(path, format(data), { encoding: "utf8" });
+    feWriteFile(path, format(data), { encoding: 'utf8' });
   });
 };

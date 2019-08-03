@@ -1,3 +1,4 @@
+/** @format */
 export declare function format(code: string): string;
 export declare const printError: (msg: string) => void;
 export declare const loadYaml: (path: string) => any;
