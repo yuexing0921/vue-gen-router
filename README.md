@@ -1,3 +1,7 @@
+[![NPM](https://img.shields.io/npm/v/vue-gen-router.svg)](https://www.npmjs.com/package/vue-gen-router)
+[![NPM](https://img.shields.io/npm/dm/vue-gen-router.svg)](https://www.npmjs.com/package/vue-gen-router)
+[![Apache 2.0 License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 ## 自动生成router文件
 
 通常情况下一个vue项目，随着时间的增加，router会越来越多，而大部分的代码其实都是重复的，修改很麻烦，还不如通过工具生成。
