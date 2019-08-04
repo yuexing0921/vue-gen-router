@@ -34,7 +34,7 @@
     "*.{ts}": [
       "yarn run format",
       "yarn run  lint",
-      "git add ."
+      "git add"
     ]
   },
   "dependencies": {
