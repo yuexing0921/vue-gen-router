@@ -68,8 +68,11 @@ const renderRoute = (
             // https://github.com/vuejs/vue-cli/issues/1198
             // https://github.com/Microsoft/TypeScript/issues/19573
             value = `
-            // prettier-ignore
-            // @ts-ignore
+            ${
+              item.length > 50
+                ? '// prettier-ignore \n // @ts-ignore '
+                : '// @ts-ignore '
+            }
             ${key}: () => import('${item}')
             `;
             rs.push(value);
@@ -100,7 +103,7 @@ const renderComponents = (c: YamlData['components'], isTs: boolean) => {
   const imports: string[] = [];
   for (const key of Object.keys(c)) {
     if (isTs) {
-      imports.push(`// @ts-ignore // prettier-ignore`);
+      imports.push(`// @ts-ignore `);
     }
     imports.push(`import ${key} from '${c[key]}'`);
   }
