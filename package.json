@@ -1,6 +1,6 @@
 {
   "name": "vue-gen-router",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Automated generation of vue-router",
   "main": "./dist/index.js",
   "author": "yuexing0921@gmail.com",
