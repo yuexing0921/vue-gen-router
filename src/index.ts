@@ -7,6 +7,7 @@ export interface CliOption {
   output: string;
   file: string;
   input: string;
+  comment: string;
 }
 
 export interface YamlData {
@@ -67,6 +68,7 @@ const renderRoute = (
             // https://github.com/vuejs/vue-cli/issues/1198
             // https://github.com/Microsoft/TypeScript/issues/19573
             value = `
+            // prettier-ignore
             // @ts-ignore
             ${key}: () => import('${item}')
             `;
@@ -98,7 +100,7 @@ const renderComponents = (c: YamlData['components'], isTs: boolean) => {
   const imports: string[] = [];
   for (const key of Object.keys(c)) {
     if (isTs) {
-      imports.push(`// @ts-ignore`);
+      imports.push(`// @ts-ignore // prettier-ignore`);
     }
     imports.push(`import ${key} from '${c[key]}'`);
   }
@@ -107,6 +109,12 @@ const renderComponents = (c: YamlData['components'], isTs: boolean) => {
 
 const genTs = (opiton: CliOption, importStr: string, routeStr: string) => {
   const code = `
+
+  /**
+   * @description ${opiton.comment}
+   * @update ${new Date().toString()}
+   */
+
   import { RouteConfig } from 'vue-router'
   
   ${importStr}

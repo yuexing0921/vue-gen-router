@@ -23,7 +23,8 @@ export function format(code: string): string {
     tabWidth: 2,
     insertPragma: true,
     bracketSpacing: true,
-    useTabs: false
+    useTabs: false,
+    arrowParens: 'avoid'
   });
 }
 

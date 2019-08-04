@@ -10,17 +10,26 @@ routes:
     name: login
     component: router-view
     props: true
-    meta: 
-      title: 登录
+    meta: {
+              title: '系统',
+              index: true,
+              auth: [
+                'architecture',
+                'subject',
+                'department',
+                'class',
+                'teacherFile',
+                'studentFile',
+                'parentFile',
+                'role',
+                'term'
+              ]
+            }      
   - path: ''
     name: 'Layout'
     redirect: '/index'
     component: Layout
-    meta:
-      title: 首页
-      auth:
-          - indexview
-          - campusInfo
+    meta: { title: '架构', auth: ['architecture'] }
     children:
       - path: '/index'
         component: Routerview
@@ -83,6 +92,14 @@ routes:
     component: views/updateServe/index
     meta:
       title: 升级服务
+    children:  [
+              {
+                path: 'teacher',
+                name: 'teacherInSubject',
+                component: views/views/viewsviews/viewsviews/viewsviews/views/views/system/archives/facultyManage,
+                meta: { title: '教职工管理', auth: ['teacherFile'] }
+              }
+            ]  
   - path: '/publish'
     name: 'publish'
     meta:

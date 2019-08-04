@@ -7,3 +7,4 @@ tabWidth: 2
 insertPragma: true
 bracketSpacing: true
 useTabs: false
+arrowParens: "avoid"
