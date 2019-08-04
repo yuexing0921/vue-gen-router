@@ -68,11 +68,8 @@ const renderRoute = (
             // https://github.com/vuejs/vue-cli/issues/1198
             // https://github.com/Microsoft/TypeScript/issues/19573
             value = `
-            ${
-              item.length > 50
-                ? '// prettier-ignore \n // @ts-ignore '
-                : '// @ts-ignore '
-            }
+            // prettier-ignore
+            // @ts-ignore
             ${key}: () => import('${item}')
             `;
             rs.push(value);
