@@ -19,7 +19,7 @@ const renderKeep = (keepStr: string) => {
   const keeps = keepStr.split(':');
 
   return `{
-    render: () => (
+    render: h => (
       <keep-alive include="${keeps[1]}">
         <router-view />
       </keep-alive>
