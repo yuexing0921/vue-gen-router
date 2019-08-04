@@ -26,6 +26,13 @@ const renderKeep = (keepStr: string) => {
   }
 `;
 };
+
+const renderRouterView = () => {
+  return `{
+    render: () => <router-view />
+  }`;
+};
+
 const renderRoute = (
   route: RouteConfig,
   components: YamlData['components'],
@@ -38,13 +45,19 @@ const renderRoute = (
   for (const r of Object.keys(route)) {
     const key: keyof RouteConfig = r as any;
     const item = route[key];
-    let value: string = `'${item}'`;
+    let value: string | boolean = `'${item}'`;
+    if (typeof item === 'boolean') {
+      value = item;
+    }
+
     switch (key) {
       case 'meta':
         value = JSON.stringify(item);
         break;
       case 'component':
-        if (item.match(/^keep/)) {
+        if (item === 'router-view') {
+          value = renderRouterView();
+        } else if (item.match(/^keep:/)) {
           value = renderKeep(item);
         } else if (components[item]) {
           value = item;

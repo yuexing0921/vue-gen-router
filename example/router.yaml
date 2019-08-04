@@ -8,7 +8,8 @@ components:
 routes:
   - path: /login
     name: login
-    component: views/login/index
+    component: router-view
+    props: true
     meta: 
       title: 登录
   - path: ''
@@ -82,8 +83,7 @@ routes:
     component: views/updateServe/index
     meta:
       title: 升级服务
-  - path: '/moralMonth'
-    name: 'moralMonth'
-    component: views/education/analysis/moralMonth 
+  - path: '/publish'
+    name: 'publish'
     meta:
-      title: 德育工作包
+      title: 工作包
