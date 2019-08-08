@@ -6,7 +6,7 @@ const utils = require("../dist/util");
 const yargs = require("yargs").options({
 	input: {
 		alias: "i",
-		describe: "The yaml file that needs to be transformed",
+		describe: "The yaml/js/ts/tsx file that needs to be transformed",
         type: "string",
         demandOption: true
 	},

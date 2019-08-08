@@ -8,14 +8,32 @@
 
 ### 快速开始
 
-``` 
-// 为package.json添加依赖
-yarn add --dev vue-gen-router
+为package.json添加依赖
 
-// 查看例子
-node_modules/.bin/vue-gen-router -i example/router.yaml 
 ```
-默认会在src/routers 目录下生成一个config.tsx 的typescript的文件
+yarn add --dev vue-gen-router
+```
+
+4种使用方式
+
+1. 把yaml数据转换成tsx,并且输出到src/routers目录下，文件命名为config.tsx
+
+``` 
+node_modules/.bin/vue-gen-router -i example/router.yaml  -o src/routers -f config.tsx
+```
+
+2. 把yaml数据转换成js,并且输出到src/routers目录下，文件命名为config.js
+
+```
+node_modules/.bin/vue-gen-router -i example/router.yaml  -o src/routers -f config.js
+```
+
+3. 把tsx数据转换成yaml文件,并且输出到./目录下，文件命名为router.yaml
+
+```
+node_modules/.bin/vue-gen-router -i example/config.tsx  -o src/routers -f router.yaml
+```
+
 
 参考例子中文件夹下的example/router.yaml，建立自己的router.yaml，基本上和之前写vue-router时没有多大区别
 
