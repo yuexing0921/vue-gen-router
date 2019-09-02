@@ -63,7 +63,7 @@ const renderRoute = (
         } else if (components[item]) {
           value = item;
         } else {
-          if (isTs) {
+          if (isTs && typeof value === 'string' && !value.match(/\.vue$/)) {
             // Why do I need to add @ts-ignore ?
             // https://github.com/vuejs/vue-cli/issues/1198
             // https://github.com/Microsoft/TypeScript/issues/19573
