@@ -107,11 +107,11 @@ const renderComponents = (c: YamlData['components'], isTs: boolean) => {
   return imports.join('\n');
 };
 
-const genTs = (opiton: CliOption, importStr: string, routeStr: string) => {
+const genTs = (option: CliOption, importStr: string, routeStr: string) => {
   const code = `
 
   /**
-   * @description ${opiton.comment}
+   * @description ${option.comment}
    * @update ${new Date().toString()}
    */
 
@@ -123,10 +123,10 @@ const genTs = (opiton: CliOption, importStr: string, routeStr: string) => {
     ${routeStr}
   ]
   `;
-  writeFile(opiton.output, opiton.file, code);
+  writeFile(option.output, option.file, code);
 };
 
-const genJs = (opiton: CliOption, importStr: string, routeStr: string) => {
+const genJs = (option: CliOption, importStr: string, routeStr: string) => {
   const code = `
   
   ${importStr}
@@ -135,18 +135,18 @@ const genJs = (opiton: CliOption, importStr: string, routeStr: string) => {
     ${routeStr}
   ]
   `;
-  writeFile(opiton.output, opiton.file, code);
+  writeFile(option.output, option.file, code);
 };
 
 /**
- * @param opiton
+ * @param option
  */
-export const run = (opiton: CliOption) => {
-  const yamlData: YamlData = loadYaml(opiton.input);
+export const run = (option: CliOption) => {
+  const yamlData: YamlData = loadYaml(option.input);
 
   const routes: string[] = [];
 
-  const isTs: boolean = !!opiton.file.match(/\.tsx?$/) || false;
+  const isTs: boolean = !!option.file.match(/\.tsx?$/) || false;
 
   yamlData.routes.forEach(k => {
     routes.push('{' + renderRoute(k, yamlData.components, isTs) + '}');
@@ -155,8 +155,8 @@ export const run = (opiton: CliOption) => {
 
   // console.log(isTs, routes, importStr);
   if (isTs) {
-    genTs(opiton, importStr, routes.join());
+    genTs(option, importStr, routes.join());
   } else {
-    genJs(opiton, importStr, routes.join());
+    genJs(option, importStr, routes.join());
   }
 };
